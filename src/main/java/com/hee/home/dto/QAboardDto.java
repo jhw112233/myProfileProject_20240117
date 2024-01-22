@@ -67,6 +67,7 @@ public class QAboardDto {
 		this.qbdate = qbdate;
 	}
 	
+
 	
 	
 	

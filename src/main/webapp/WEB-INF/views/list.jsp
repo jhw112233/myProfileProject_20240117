@@ -57,10 +57,33 @@
 									<td colspan="5" align="right">
 										<input class="con_btn01" type="button" value="글쓰기" onclick="javascript:window.location.href='writeForm'">
 									</td>
-								</tr>		
+								</tr>
+
+								</tr>					
+							<!-- 페이징 -->
+								<tr colspan="5" align="center"  >
+									<c:if test="${pageDto.prev }">
+										◁ prev&nbsp;&nbsp;
+									</c:if>
+									<c:forEach begin="${pageDto.startPage }" end="${pageDto.endPage }" var="pageNumber">		
+									<c:choose>
+										<c:when test="${currPage==pageNumber }">
+											<span style="background-color: #7FC7D9;  font-weight: bold;">&nbsp;&nbsp;${pageNumber}&nbsp;&nbsp;</span>
+										</c:when>
+										<c:otherwise>
+											<a href="board?pageNum=${pageNumber}">&nbsp;&nbsp;${pageNumber}&nbsp;&nbsp;
+										</c:otherwise>
+									</c:choose>
+									</c:forEach>
+									<c:if test="${pageDto.next }">
+										&nbsp;&nbsp;next ▷
+									</c:if>																		
 							</table>				
 						</td>
-					</tr>					
+			
+					</tr>
+					
+					
 				</table>
 			</td>
 		</tr>

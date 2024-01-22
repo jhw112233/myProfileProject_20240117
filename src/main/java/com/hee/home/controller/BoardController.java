@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.hee.home.dao.BoardDao;
 import com.hee.home.dao.MemberDao;
+import com.hee.home.dto.Criteria;
 import com.hee.home.dto.MemberDto;
+import com.hee.home.dto.PageDto;
 import com.hee.home.dto.QAboardDto;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,14 +29,30 @@ public class BoardController {
 	
 	
 	@GetMapping(value = "/board")
-	public String board(HttpServletRequest request, Model model) {
+	public String board(HttpServletRequest request, Model model, Criteria criteria) {
+		if(request.getParameter("pageNum") !=null) {//유저가 게시판 페이지 번호를 클릭해서 리스트로 온경우
+			criteria.setAmount(Integer.parseInt( request.getParameter("pageNum")));
+			//문자열로 넘어온 유저 클릭 페이지 번호를 정수로 변환하여 세팅
+		}
+		
+		request.getParameter("pageNum");//유저클릭 페이지 번호
+		
 		
 		BoardDao dao = sqlSession.getMapper(BoardDao.class);
+		
+		int total = dao.boardAllCountDao();//게시판에 등록된 총 글의 개수
+		
+		PageDto pageDto = new PageDto(criteria, total);
+		
 		List<QAboardDto> dtos= dao.listDao();
 		model.addAttribute("list", dtos);
+		model.addAttribute("pageDto",pageDto);
+		model.addAttribute("currPage",criteria.getPageNum());
 		
 		return "list";
 	}
+	
+	
 	@GetMapping(value = "/writeForm")
 	public String writeForm(HttpServletRequest request, Model model, HttpSession session, HttpServletResponse response) throws IOException {
 		
